@@ -1,5 +1,10 @@
 <main class="main">
   <div class="content">
-    <h1>Leve</h1>
+    <h1 class="app-title">Leve</h1>
+    <ul>
+      <li class="festival" *ngFor="let festival of festivals; index as i">
+        <festival-card [festival]="festival" />
+      </li>
+    </ul>
   </div>
 </main>

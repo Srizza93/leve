@@ -1,0 +1,32 @@
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ festival.nom_du_festival }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="second-level">
+      {{ festival.commune_principale_de_deroulement }} -
+      {{ festival.region_principale_de_deroulement }}
+    </p>
+    <p class="second-level">
+      {{ festival.discipline_dominante }}
+      <ng-container *ngIf="festival.sous_categorie_musique">
+        - {{ festival.sous_categorie_musique }}
+      </ng-container>
+    </p>
+    <p class="second-level">
+      {{ festival.periode_principale_de_deroulement_du_festival }}
+    </p>
+  </mat-card-content>
+  <mat-card-footer class="example-card-footer">
+    <a
+      *ngIf="festival.site_internet_du_festival"
+      [href]="
+        festival.site_internet_du_festival.startsWith('http')
+          ? festival.site_internet_du_festival
+          : 'https://' + festival.site_internet_du_festival
+      "
+      class="website"
+      >Link</a
+    >
+  </mat-card-footer>
+</mat-card>
