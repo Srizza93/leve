@@ -1,10 +1,20 @@
 <main class="main">
   <div class="content">
     <h1 class="app-title">Leve</h1>
+    <mat-divider></mat-divider>
     <ul>
       <li class="festival" *ngFor="let festival of festivals; index as i">
         <festival-card [festival]="festival" />
       </li>
     </ul>
+    <mat-paginator
+      (page)="handlePageEvent($event)"
+      class="paginator"
+      [length]="itemsLength"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 </main>
