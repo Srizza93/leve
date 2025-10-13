@@ -24,11 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "_redirects",
-                "input": "src",
-                "output": "/"
-              }
+              { "glob": "404.html", "input": "src", "output": "/" },
+              { "glob": "favicon.ico", "input": "src", "output": "/" }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
