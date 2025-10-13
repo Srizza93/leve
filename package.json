@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production --base-href '/leve/' && npm run postbuild:404",
+    "postbuild:404": "cp dist/leve/browser/index.html dist/leve/browser/404.html",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
