@@ -31,14 +31,14 @@ jobs:
 
       # Build the project
       - name: Build project
-        run: npm run build
+        run: npm run build:prod
 
       # Upload the dist folder as an artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b
         with:
           name: github-pages
-          path: ./dist
+          path: ./dist/leve/browser
 
   deploy:
     runs-on: ubuntu-latest
