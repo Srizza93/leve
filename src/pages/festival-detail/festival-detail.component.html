@@ -1,8 +1,22 @@
 <main class="main">
   <div class="content">
-    <h1 class="app-title">Leve</h1>
+    <header class="header">
+      <h1 class="header__title">Leve</h1>
+      <form class="header__search-form">
+        <mat-form-field>
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            type="text"
+            matInput
+            [formControl]="searchInput"
+            placeholder="Search by name..."
+          />
+        </mat-form-field>
+      </form>
+    </header>
     <mat-divider></mat-divider>
-    <ul>
+
+    <ul class="festival-list">
       <li class="festival" *ngFor="let festival of festivals; index as i">
         <festival-card [festival]="festival" />
       </li>

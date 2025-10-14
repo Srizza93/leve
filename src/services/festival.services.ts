@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Festival, FestivalResponse } from '@/models/festival.model';
+import { Festival, FestivalKeys, FestivalResponse } from '@/models/festival.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +12,12 @@ export class FestivalService {
 
   constructor(private http: HttpClient) {}
 
-  getFestivals(pageIndex: number, pageSize: number, orderBy: keyof Festival): Observable<FestivalResponse> {
+  getFestivals(pageIndex: number, pageSize: number, orderBy: keyof Festival, searchInput?: string | null): Observable<FestivalResponse> {
     const offset = (pageIndex - 1) * pageSize;
+    const whereClause = searchInput ? FestivalKeys.NOM_DU_FESTIVAL + " like '" + searchInput + "'": "";
 
     const params = new HttpParams()
+      .set("where", whereClause)
       .set('order_by', orderBy)
       .set('limit', pageSize.toString())
       .set('offset', offset.toString());
