@@ -16,6 +16,19 @@
     </header>
     <mat-divider></mat-divider>
 
+    <form class="sort">
+      <mat-form-field>
+        <mat-label>Type</mat-label>
+        <mat-select [formControl]="orderBy">
+          @for (festivalKey of festivalKeys; track festivalKey) {
+          <mat-option [value]="festivalKey.value">{{
+            festivalKey.valueView
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
     <ul class="festival-list">
       <li class="festival" *ngFor="let festival of festivals; index as i">
         <festival-card [festival]="festival" />

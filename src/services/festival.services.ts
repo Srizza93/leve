@@ -12,13 +12,14 @@ export class FestivalService {
 
   constructor(private http: HttpClient) {}
 
-  getFestivals(pageIndex: number, pageSize: number, orderBy: keyof Festival, searchInput?: string | null): Observable<FestivalResponse> {
+  getFestivals(pageIndex: number, pageSize: number, orderBy?: keyof Festival | null, searchInput?: string | null): Observable<FestivalResponse> {
     const offset = (pageIndex - 1) * pageSize;
-    const whereClause = searchInput ? FestivalKeys.NOM_DU_FESTIVAL + " like '" + searchInput + "'": "";
+    const whereClause = searchInput ? FestivalKeys.NOM_DU_FESTIVAL + " like '" + searchInput + "'" : "";
+    const orderClause = orderBy ?? FestivalKeys.NOM_DU_FESTIVAL
 
     const params = new HttpParams()
       .set("where", whereClause)
-      .set('order_by', orderBy)
+      .set('order_by', orderClause)
       .set('limit', pageSize.toString())
       .set('offset', offset.toString());
     
