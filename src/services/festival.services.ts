@@ -14,15 +14,31 @@ export class FestivalService {
 
   getFestivals(pageIndex: number, pageSize: number, orderBy?: keyof Festival | null, searchInput?: string | null): Observable<FestivalResponse> {
     const offset = (pageIndex - 1) * pageSize;
-    const whereClause = searchInput ? FestivalKeys.NOM_DU_FESTIVAL + " like '" + searchInput + "'" : "";
-    const orderClause = orderBy ?? FestivalKeys.NOM_DU_FESTIVAL
+    const whereClause = this.getWhereClause(searchInput);
+    const orderClause = Object.values(FestivalKeys).includes(orderBy as any) ? orderBy as string
+     : FestivalKeys.NOM_DU_FESTIVAL;
 
-    const params = new HttpParams()
-      .set("where", whereClause)
+    let params = new HttpParams()
       .set('order_by', orderClause)
       .set('limit', pageSize.toString())
       .set('offset', offset.toString());
+      
+    if (whereClause) {
+      params = params.set('where', whereClause);
+
+    }
     
     return this.http.get<FestivalResponse>(this.apiUrl, { params });
+  }
+
+  getWhereClause(searchInput?: string | null): string | null{
+    if (!searchInput) {
+      return null;
+    }
+    
+    const safeInput = searchInput.trim().replace(/'/g, "''");
+    return `${FestivalKeys.NOM_DU_FESTIVAL} like '%${safeInput}%' OR ` +
+          `${FestivalKeys.COMMUNE_PRINCIPALE_DE_DEROULEMENT} like '%${safeInput}%' OR ` +
+          `${FestivalKeys.DEPARTEMENT_PRINCIPAL_DE_DEROULEMENT} like '%${safeInput}%'`;
   }
 }
