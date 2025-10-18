@@ -1,13 +1,38 @@
-.app-title {
-  margin-left: 40px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__title {
+      margin: 1.25rem 0 1.25rem 2rem;
+    }
+
+  &__search-form {
+    margin: 1.25rem 2rem 0 0;
+  }
+}
+
+.sort {
+  display: block;
+  width: fit-content;
+  margin: 1.25rem 0 0 2rem;
+}
+
+.festival-list {
+  padding: 0 2rem;
+  margin-top: 0;
 }
 
 .festival {
   list-style: none;
   max-width: 400px;
   margin: 2rem 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 .paginator {
-  margin: 0 40px;
+  margin: 0 2rem;
 }
