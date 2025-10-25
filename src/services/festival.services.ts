@@ -40,6 +40,18 @@ export class FestivalService {
     return this.http.get<FestivalResponse>(this.apiUrl, { params });
   }
 
+  getFestival(festivalId?: string | null): Observable<FestivalResponse> {
+    const offset = 0;
+    const whereClause = `${FestivalKeys.IDENTIFIANT} like '%${festivalId}%'`;
+
+    let params = new HttpParams()
+      .set('limit', 1)
+      .set('offset', offset.toString())
+      .set('where', whereClause);
+
+    return this.http.get<FestivalResponse>(this.apiUrl, { params });
+  }
+
   getWhereClause(searchInput?: string | null): string | null {
     if (!searchInput) {
       return null;

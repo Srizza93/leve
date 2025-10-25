@@ -16,19 +16,20 @@ export class FestivalDetailPageComponent {
   constructor(private festivalService: FestivalService) {}
 
   getSelectedFestival() {
+    const festivalId = new URLSearchParams(window.location.search).get(
+      'festivalId'
+    );
     this.isLoading = true;
-    this.festivalService
-      .getFestivals(0, 1, null, ' this.searchInput.value')
-      .subscribe({
-        next: (response: FestivalResponse) => {
-          this.festival = response.results[0];
-          this.isLoading = false;
-        },
-        error: (e: Error) => {
-          console.log(e);
-          this.isLoading = false;
-        },
-      });
+    this.festivalService.getFestival(festivalId).subscribe({
+      next: (response: FestivalResponse) => {
+        this.festival = response.results[0];
+        this.isLoading = false;
+      },
+      error: (e: Error) => {
+        console.log(e);
+        this.isLoading = false;
+      },
+    });
   }
 
   ngOnInit() {
