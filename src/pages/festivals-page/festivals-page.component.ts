@@ -15,6 +15,9 @@ import {
   FestivalKeys,
   festivalKeyTranslation,
 } from '@/models/festival.model';
+import { Store } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
+import { SearchState } from '@/store/search.reducer';
 
 @Component({
   selector: 'festivals-page',
@@ -41,14 +44,19 @@ export class FestivalsPageComponent {
   pageIndex: number = 1;
   itemsLength: number = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  searchInput: FormControl<string | null> = new FormControl('', []);
+  searchInput$: Observable<string>;
   orderBy: FormControl<keyof Festival | null> = new FormControl(
     FestivalKeys.NOM_DU_FESTIVAL,
     []
   );
   festivalKeys = this.mapFestivalKeysForSelction();
 
-  constructor(private festivalService: FestivalService) {}
+  constructor(
+    private festivalService: FestivalService,
+    private store: Store<{ search: SearchState }>
+  ) {
+    this.searchInput$ = this.store.select((state) => state.search.searchInput);
+  }
 
   mapFestivalKeysForSelction() {
     return Object.values(FestivalKeys)
@@ -75,28 +83,30 @@ export class FestivalsPageComponent {
 
   getFestivals() {
     this.isLoading = true;
-    this.festivalService
-      .getFestivals(
-        this.pageIndex,
-        this.pageSize,
-        this.orderBy.value,
-        this.searchInput.value
-      )
-      .subscribe({
-        next: (response: FestivalResponse) => {
-          this.festivals = response.results;
-          this.itemsLength = response.total_count;
-          this.isLoading = false;
-        },
-        error: (e: Error) => {
-          console.log(e);
-          this.isLoading = false;
-        },
-      });
-  }
 
-  handleSearchInput() {
-    this.searchInput.valueChanges.subscribe(() => this.getFestivals());
+    this.store
+      .select((state) => state.search.searchInput)
+      .pipe(take(1))
+      .subscribe((searchInput) => {
+        this.festivalService
+          .getFestivals(
+            this.pageIndex,
+            this.pageSize,
+            this.orderBy.value,
+            searchInput
+          )
+          .subscribe({
+            next: (response: FestivalResponse) => {
+              this.festivals = response.results;
+              this.itemsLength = response.total_count;
+              this.isLoading = false;
+            },
+            error: (e) => {
+              console.error(e);
+              this.isLoading = false;
+            },
+          });
+      });
   }
 
   handleSort() {
@@ -105,7 +115,6 @@ export class FestivalsPageComponent {
 
   ngOnInit() {
     this.getFestivals();
-    this.handleSearchInput();
     this.handleSort();
   }
 }
