@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -17,9 +17,9 @@ import {
 } from '@/models/festival.model';
 
 @Component({
-  selector: 'festival-detail',
-  templateUrl: './festival-detail.component.html',
-  styleUrls: ['./festival-detail.component.scss'],
+  selector: 'festivals-page',
+  templateUrl: './festivals-page.component.html',
+  styleUrls: ['./festivals-page.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -34,7 +34,7 @@ import {
     MatSelectModule,
   ],
 })
-export class FestivalDetailComponent {
+export class FestivalsPageComponent {
   festivals: Festival[] = [];
   isLoading: boolean = false;
   pageSize: number = 5;

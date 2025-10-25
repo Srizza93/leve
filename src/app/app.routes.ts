@@ -1,16 +1,23 @@
 import { Routes } from '@angular/router';
-import { FestivalDetailComponent } from '@/pages/festival-detail/festival-detail.component';
-import {
-  FestivalDetailPath
-} from '@/constants/paths.constants';
+import { FestivalsPageComponent } from '@/pages/festivals-page/festivals-page.component';
+import { FestivalDetailPageComponent } from '@/pages/festival-detail-page/festival-detail-page.component';
+import { FestivalsPath, FestivalDetailPath } from '@/constants/paths.constants';
 
 export const routes: Routes = [
+  { path: '', redirectTo: FestivalsPath, pathMatch: 'full' },
+  {
+    path: FestivalsPath,
+    loadComponent: () =>
+      import('@/pages/festivals-page/festivals-page.component').then(
+        (m) => m.FestivalsPageComponent
+      ),
+  },
   {
     path: FestivalDetailPath,
     loadComponent: () =>
-      import('@/pages/festival-detail/festival-detail.component').then(
-        (m) => m.FestivalDetailComponent
-      ),
+      import(
+        '@/pages/festival-detail-page/festival-detail-page.component'
+      ).then((m) => m.FestivalDetailPageComponent),
   },
-  { path: '**', component: FestivalDetailComponent },
+  { path: '**', component: FestivalsPageComponent, pathMatch: 'full' },
 ];
