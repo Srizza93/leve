@@ -1,13 +1,14 @@
 import { Festival, FestivalResponse } from '@/models/festival.model';
 import { Component } from '@angular/core';
 import { FestivalService } from '@/services/festival.services';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'festival-detail-page',
   templateUrl: './festival-detail-page.component.html',
   styleUrls: ['./festival-detail-page.component.scss'],
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
 })
 export class FestivalDetailPageComponent {
   festival: Festival | null = null;

@@ -6,7 +6,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { FestivalsPath } from '@/constants/paths.constants';
+import { FestivalDetailPath, FestivalsPath } from '@/constants/paths.constants';
 import { SearchStore } from '@/store/search.store';
 
 @Component({
@@ -38,6 +38,14 @@ export class AppComponent {
     return [FestivalsPath].includes(currentRoute);
   }
 
+  get isBackIconAllowed(): boolean {
+    const currentRoute = this.currentRoute.substring(
+      this.currentRoute.indexOf('/') + 1,
+      this.currentRoute.indexOf('?')
+    );
+
+    return [FestivalDetailPath].includes(currentRoute);
+  }
   getRouteName() {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -51,6 +59,10 @@ export class AppComponent {
     this.searchInput.valueChanges.subscribe(() => {
       this.searchStore.updateSearchInput(this.searchInput.value!);
     });
+  }
+
+  goToFestivalsPage() {
+    this.router.navigate([FestivalsPath]);
   }
 
   ngOnInit() {

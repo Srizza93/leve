@@ -1,9 +1,15 @@
-<header>
-  <h1>{{ festival?.nom_du_festival }}</h1>
-  <span>Since {{ festival?.annee_de_creation_du_festival }}</span>
+<div class="festival-container">
+  <header class="header">
+    <h1 class="header__title">{{ festival?.nom_du_festival }}</h1>
+    <span class="header__subtext"
+      >Since {{ festival?.annee_de_creation_du_festival }}</span
+    >
+  </header>
   <section>
-    <h3>Contacts</h3>
-    <p>Email: {{ festival?.adresse_e_mail }}</p>
+    <h3>Contacts and Info</h3>
+    <p *ngIf="festival?.adresse_e_mail">
+      Email: {{ festival?.adresse_e_mail }}
+    </p>
     <a [href]="festival?.site_internet_du_festival">{{
       festival?.site_internet_du_festival
     }}</a>
@@ -28,4 +34,4 @@
     <p>{{ festival?.sous_categorie_musique_cnm }}</p>
     <p>{{ festival?.sous_categorie_spectacle_vivant }}</p>
   </section>
-</header>
+</div>

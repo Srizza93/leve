@@ -1,0 +1,16 @@
+.festival-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+  &__title {
+    margin-bottom: 0;
+  }
+  &__subtext {
+    color: #6B7280;
+    font-size: 14px;
+  }
+}
