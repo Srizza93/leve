@@ -1,3 +1,27 @@
-<div class="app-layout">
+<main class="main">
+  <header class="header">
+    <h1 class="header__title">Leve</h1>
+    <button
+      *ngIf="isBackIconAllowed"
+      (click)="goToFestivalsPage()"
+      class="header__back-btn"
+    >
+      <mat-icon class="header__back-btn__icon">arrow_circle_left</mat-icon>
+    </button>
+
+    <form *ngIf="isSearchInputAllowed" class="header__search-form">
+      <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          type="text"
+          matInput
+          [formControl]="searchInput"
+          placeholder="Search by name, city, department..."
+        />
+      </mat-form-field>
+    </form>
+  </header>
+  <mat-divider></mat-divider>
+
   <router-outlet />
-</div>
+</main>

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -15,11 +15,12 @@ import {
   FestivalKeys,
   festivalKeyTranslation,
 } from '@/models/festival.model';
+import { SearchStore } from '@/store/search.store';
 
 @Component({
-  selector: 'festival-detail',
-  templateUrl: './festival-detail.component.html',
-  styleUrls: ['./festival-detail.component.scss'],
+  selector: 'festivals-page',
+  templateUrl: './festivals-page.component.html',
+  styleUrls: ['./festivals-page.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -34,21 +35,27 @@ import {
     MatSelectModule,
   ],
 })
-export class FestivalDetailComponent {
+export class FestivalsPageComponent {
   festivals: Festival[] = [];
   isLoading: boolean = false;
   pageSize: number = 5;
   pageIndex: number = 1;
   itemsLength: number = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  searchInput: FormControl<string | null> = new FormControl('', []);
   orderBy: FormControl<keyof Festival | null> = new FormControl(
     FestivalKeys.NOM_DU_FESTIVAL,
     []
   );
   festivalKeys = this.mapFestivalKeysForSelction();
 
-  constructor(private festivalService: FestivalService) {}
+  constructor(
+    private festivalService: FestivalService,
+    private searchStore: SearchStore
+  ) {}
+
+  get searchInput$() {
+    return this.searchStore.searchInput$;
+  }
 
   mapFestivalKeysForSelction() {
     return Object.values(FestivalKeys)
@@ -75,28 +82,22 @@ export class FestivalDetailComponent {
 
   getFestivals() {
     this.isLoading = true;
-    this.festivalService
-      .getFestivals(
-        this.pageIndex,
-        this.pageSize,
-        this.orderBy.value,
-        this.searchInput.value
-      )
-      .subscribe({
-        next: (response: FestivalResponse) => {
-          this.festivals = response.results;
-          this.itemsLength = response.total_count;
-          this.isLoading = false;
-        },
-        error: (e: Error) => {
-          console.log(e);
-          this.isLoading = false;
-        },
-      });
-  }
 
-  handleSearchInput() {
-    this.searchInput.valueChanges.subscribe(() => this.getFestivals());
+    this.searchInput$.subscribe((value: string) => {
+      this.festivalService
+        .getFestivals(this.pageIndex, this.pageSize, this.orderBy.value, value)
+        .subscribe({
+          next: (response: FestivalResponse) => {
+            this.festivals = response.results;
+            this.itemsLength = response.total_count;
+            this.isLoading = false;
+          },
+          error: (e) => {
+            console.error(e);
+            this.isLoading = false;
+          },
+        });
+    });
   }
 
   handleSort() {
@@ -105,7 +106,6 @@ export class FestivalDetailComponent {
 
   ngOnInit() {
     this.getFestivals();
-    this.handleSearchInput();
     this.handleSort();
   }
 }

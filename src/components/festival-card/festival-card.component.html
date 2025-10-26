@@ -17,7 +17,13 @@
       {{ festival.periode_principale_de_deroulement_du_festival }}
     </p>
   </mat-card-content>
-  <mat-card-footer class="example-card-footer">
+  <mat-card-footer>
+    <a
+      [routerLink]="['/' + festivalDetailPath]"
+      [queryParams]="{ festivalId: festival.identifiant }"
+      class="card-link"
+      >See festival info</a
+    >
     <a
       *ngIf="festival.site_internet_du_festival"
       [href]="
@@ -25,7 +31,7 @@
           ? festival.site_internet_du_festival
           : 'https://' + festival.site_internet_du_festival
       "
-      class="website"
+      class="card-link"
       >Link</a
     >
   </mat-card-footer>
