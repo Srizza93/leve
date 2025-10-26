@@ -7,9 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FestivalsPath } from '@/constants/paths.constants';
-import { Store } from '@ngrx/store';
-import { setSearchInput } from '@/store/search.actions';
-import { SearchState } from '@/store/search.reducer';
+import { SearchStore } from '@/store/search.store';
 
 @Component({
   selector: 'app-root',
@@ -30,10 +28,7 @@ export class AppComponent {
   currentRoute: string = '';
   searchInput: FormControl<string | null> = new FormControl('', []);
 
-  constructor(
-    private router: Router,
-    private store: Store<{ search: SearchState }>
-  ) {}
+  constructor(private router: Router, private searchStore: SearchStore) {}
 
   get isSearchInputAllowed(): boolean {
     const currentRoute = this.currentRoute.substring(
@@ -54,9 +49,7 @@ export class AppComponent {
 
   handleSearchInput() {
     this.searchInput.valueChanges.subscribe(() => {
-      this.store.dispatch(
-        setSearchInput({ searchInput: this.searchInput.value! })
-      );
+      this.searchStore.updateSearchInput(this.searchInput.value!);
     });
   }
 

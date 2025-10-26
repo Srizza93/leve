@@ -1,16 +1,15 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { provideStore } from '@ngrx/store';
-import { searchReducer } from '@/store/search.reducer';
 
 import { routes } from './app.routes';
+import { SearchStore } from '@/store/search.store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideStore({ search: searchReducer }),
+    SearchStore,
   ],
 };
