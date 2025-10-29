@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { FestivalsPageComponent } from '@/pages/festivals-page/festivals-page.component';
-import { FestivalDetailPageComponent } from '@/pages/festival-detail-page/festival-detail-page.component';
 import { FestivalsPath, FestivalDetailPath } from '@/constants/paths.constants';
 
 export const routes: Routes = [
@@ -19,5 +17,9 @@ export const routes: Routes = [
         '@/pages/festival-detail-page/festival-detail-page.component'
       ).then((m) => m.FestivalDetailPageComponent),
   },
-  { path: '**', component: FestivalsPageComponent, pathMatch: 'full' },
+  {
+    path: '**',
+    redirectTo: FestivalsPath,
+    pathMatch: 'full',
+  },
 ];

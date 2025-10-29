@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FestivalDetailPath, FestivalsPath } from '@/constants/paths.constants';
 import { SearchStore } from '@/store/search.store';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,10 @@ export class AppComponent {
   currentRoute: string = '';
   searchInput: FormControl<string | null> = new FormControl('', []);
 
-  constructor(private router: Router, private searchStore: SearchStore) {}
+  constructor(
+    private readonly router: Router,
+    private readonly searchStore: SearchStore
+  ) {}
 
   get isSearchInputAllowed(): boolean {
     const currentRoute = this.currentRoute.substring(
@@ -46,19 +50,22 @@ export class AppComponent {
 
     return [FestivalDetailPath].includes(currentRoute);
   }
+
   getRouteName() {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
-        const url = event.url;
+        const url = event.urlAfterRedirects;
         this.currentRoute = url.substring(1);
       }
     });
   }
 
   handleSearchInput() {
-    this.searchInput.valueChanges.subscribe(() => {
-      this.searchStore.updateSearchInput(this.searchInput.value!);
-    });
+    this.searchInput.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.searchStore.updateSearchInput(this.searchInput.value!);
+      });
   }
 
   goToFestivalsPage() {
