@@ -26,11 +26,7 @@
     >
     <a
       *ngIf="festival.site_internet_du_festival"
-      [href]="
-        festival.site_internet_du_festival.startsWith('http')
-          ? festival.site_internet_du_festival
-          : 'https://' + festival.site_internet_du_festival
-      "
+      [href]="urlUtils.formatUrl(festival.site_internet_du_festival)"
       class="card-link"
       >Link</a
     >

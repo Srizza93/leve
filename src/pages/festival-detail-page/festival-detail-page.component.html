@@ -10,7 +10,7 @@
     <p *ngIf="festival?.adresse_e_mail">
       Email: {{ festival?.adresse_e_mail }}
     </p>
-    <a [href]="festival?.site_internet_du_festival">{{
+    <a [href]="urlUtils.formatUrl(festival?.site_internet_du_festival)">{{
       festival?.site_internet_du_festival
     }}</a>
   </section>

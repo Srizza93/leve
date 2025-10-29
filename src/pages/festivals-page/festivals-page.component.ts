@@ -49,8 +49,8 @@ export class FestivalsPageComponent {
   festivalKeys = this.mapFestivalKeysForSelction();
 
   constructor(
-    private festivalService: FestivalService,
-    private searchStore: SearchStore
+    private readonly festivalService: FestivalService,
+    private readonly searchStore: SearchStore
   ) {}
 
   get searchInput$() {
@@ -76,11 +76,11 @@ export class FestivalsPageComponent {
     if (hasPageSizeChanged || hasPageIndexChanged) {
       this.pageSize = event.pageSize;
       this.pageIndex = event.pageIndex + 1;
-      this.getFestivals();
+      this.loadFestivals();
     }
   }
 
-  getFestivals() {
+  loadFestivals() {
     this.isLoading = true;
 
     this.searchInput$.subscribe((value: string) => {
@@ -101,11 +101,11 @@ export class FestivalsPageComponent {
   }
 
   handleSort() {
-    this.orderBy.valueChanges.subscribe(() => this.getFestivals());
+    this.orderBy.valueChanges.subscribe(() => this.loadFestivals());
   }
 
   ngOnInit() {
-    this.getFestivals();
+    this.loadFestivals();
     this.handleSort();
   }
 }

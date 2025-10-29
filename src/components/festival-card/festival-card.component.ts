@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { FestivalDetailPath } from '@/constants/paths.constants';
+import { UrlUtils } from '@/utils/url.utils';
 
 @Component({
   selector: 'festival-card',
@@ -14,6 +15,8 @@ import { FestivalDetailPath } from '@/constants/paths.constants';
 })
 export class FestivalCardComponent {
   @Input() festival: Festival = {} as Festival;
+
+  constructor(public urlUtils: UrlUtils) {}
 
   festivalDetailPath: string = FestivalDetailPath;
 }
