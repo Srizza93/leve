@@ -64,4 +64,15 @@ export class FestivalService {
       `${FestivalKeys.DEPARTEMENT_PRINCIPAL_DE_DEROULEMENT} like '%${safeInput}%'`
     );
   }
+
+  getCoordinates(festivals: Festival[]): number[][] {
+    return festivals
+      .map((festival: Festival) => {
+        if ((festival.geocodage_xy?.lat, festival.geocodage_xy?.lon)) {
+          return [festival.geocodage_xy?.lat, festival.geocodage_xy?.lon];
+        }
+        return [];
+      })
+      .filter((coordinate: number[]) => coordinate.length!!);
+  }
 }

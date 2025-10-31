@@ -16,6 +16,7 @@ import {
   festivalKeyTranslation,
 } from '@/models/festival.model';
 import { SearchStore } from '@/store/search.store';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'festivals-page',
@@ -36,6 +37,7 @@ import { SearchStore } from '@/store/search.store';
   ],
 })
 export class FestivalsPageComponent {
+  private map!: L.Map;
   festivals: Festival[] = [];
   isLoading: boolean = false;
   pageSize: number = 5;
@@ -91,6 +93,10 @@ export class FestivalsPageComponent {
             this.festivals = response.results;
             this.itemsLength = response.total_count;
             this.isLoading = false;
+            const coordinates: number[][] = this.festivalService.getCoordinates(
+              response.results
+            );
+            this.initMap(coordinates);
           },
           error: (e) => {
             console.error(e);
@@ -102,6 +108,34 @@ export class FestivalsPageComponent {
 
   handleSort() {
     this.orderBy.valueChanges.subscribe(() => this.loadFestivals());
+  }
+
+  private initMap(coordinates: number[][]): void {
+    this.map = L.map('map', {
+      center: [39.8282, -98.5795],
+      zoom: 3,
+    });
+
+    const tiles = L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        maxZoom: 18,
+        minZoom: 3,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }
+    );
+
+    tiles.addTo(this.map);
+
+    // Add markers
+    const markers = coordinates.map(([lat, lng]) =>
+      L.marker([lat, lng]).addTo(this.map)
+    );
+
+    // Auto-fit the map to include all markers
+    const group = L.featureGroup(markers);
+    this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
   }
 
   ngOnInit() {
