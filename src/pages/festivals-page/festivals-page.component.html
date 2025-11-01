@@ -1,38 +1,37 @@
 <main class="main">
-  <div class="container">
-    <div class="form-content">
-      <form class="sort">
-        <mat-form-field>
-          <mat-label>Type</mat-label>
-          <mat-select [formControl]="orderBy">
-            @for (festivalKey of festivalKeys; track festivalKey) {
-            <mat-option [value]="festivalKey.value">{{
-              festivalKey.valueView
-            }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </form>
+  <form class="sort">
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select [formControl]="orderBy">
+        @for (festivalKey of festivalKeys; track festivalKey) {
+        <mat-option [value]="festivalKey.value">{{
+          festivalKey.valueView
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
 
-      <ul class="festival-list">
-        <li class="festival" *ngFor="let festival of festivals; index as i">
-          <festival-card [festival]="festival" />
-        </li>
-      </ul>
-      <mat-paginator
-        (page)="handlePageEvent($event)"
-        class="paginator"
-        [length]="itemsLength"
-        [pageSize]="pageSize"
-        [pageSizeOptions]="pageSizeOptions"
-        aria-label="Select page"
-      >
-      </mat-paginator>
-    </div>
+  <div class="festival-container">
+    <ul class="festival-list">
+      <li class="festival" *ngFor="let festival of festivals; index as i">
+        <festival-card [festival]="festival" />
+      </li>
+    </ul>
     <div class="map-container">
       <div class="map-frame">
         <div id="map"></div>
       </div>
     </div>
   </div>
+
+  <mat-paginator
+    (page)="handlePageEvent($event)"
+    class="paginator"
+    [length]="itemsLength"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page"
+  >
+  </mat-paginator>
 </main>

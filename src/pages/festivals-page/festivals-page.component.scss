@@ -1,16 +1,24 @@
 @import "leaflet/dist/leaflet.css";
 
-.container {
+.main {
   display: flex;
-  flex-direction: row;
-  height: 100vh;
-  padding: 0 2rem;
+  flex-direction: column;
 }
 
 .sort {
   display: block;
   width: fit-content;
-  margin: 1.25rem 0;
+  margin: 1.25rem 2rem;
+}
+
+.festival-container {
+  display: flex;
+  padding: 0 2rem;
+  gap: 2rem;
+
+  @media screen and (max-width: 950px) {
+      flex-direction: column-reverse;
+    }
 }
 
 .festival-list {
@@ -29,23 +37,33 @@
 }
 
 .paginator {
-  margin: 0 2rem;
+  border-top: 1px solid #c4c6d0;
 }
 
-.form-content,
+.festival-list,
 .map-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  width: 50%;
+
+  @media screen and (max-width: 950px) {
+      width: 100%;
+    }
 }
 
 .map-container {
-  margin-top: 1.25rem;
+  height: 600px;
+
+  @media screen and (max-width: 950px) {
+      height: 400px;
+    }
 }
 
 .map-frame {
-  border: 2px solid black;
   height: 100%;
+  border-radius: 12px;
+  border: 1px solid #c4c6d0;
+  overflow: hidden;
 }
 
 #map {

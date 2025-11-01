@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { FestivalService } from '@/services/festival.services';
+import { UrlUtils } from '@/utils/url.utils';
 import { FestivalCardComponent } from '@/components/festival-card/festival-card.component';
 import {
   Festival,
@@ -36,7 +37,7 @@ import * as L from 'leaflet';
     MatSelectModule,
   ],
 })
-export class FestivalsPageComponent {
+export class FestivalsPageComponent implements AfterViewInit {
   private map!: L.Map;
   festivals: Festival[] = [];
   isLoading: boolean = false;
@@ -52,7 +53,8 @@ export class FestivalsPageComponent {
 
   constructor(
     private readonly festivalService: FestivalService,
-    private readonly searchStore: SearchStore
+    private readonly searchStore: SearchStore,
+    public urlUtils: UrlUtils
   ) {}
 
   get searchInput$() {
@@ -93,10 +95,7 @@ export class FestivalsPageComponent {
             this.festivals = response.results;
             this.itemsLength = response.total_count;
             this.isLoading = false;
-            const coordinates: number[][] = this.festivalService.getCoordinates(
-              response.results
-            );
-            this.initMap(coordinates);
+            this.updateMapMarkers();
           },
           error: (e) => {
             console.error(e);
@@ -110,9 +109,46 @@ export class FestivalsPageComponent {
     this.orderBy.valueChanges.subscribe(() => this.loadFestivals());
   }
 
-  private initMap(coordinates: number[][]): void {
+  private updateMapMarkers(): void {
+    if (!this.map || !this.festivals.length) return;
+
+    this.map.eachLayer((layer) => {
+      if ((layer as any).getLatLng) this.map.removeLayer(layer);
+    });
+
+    const markers: L.Marker[] = [];
+    this.festivals.forEach((f) => {
+      if (f.geocodage_xy?.lat && f.geocodage_xy.lon) {
+        const popupContent = `
+        <div style="min-width:150px">
+          <strong>${f.nom_du_festival}</strong>
+          <br><br> 📅 ${
+            f.periode_principale_de_deroulement_du_festival || 'Unknown date'
+          }
+          <br>📍 ${f.commune_principale_de_deroulement || 'Unknown location'}
+          <br>
+          <span>🔗 <a href="${this.urlUtils.formatUrl(
+            f.site_internet_du_festival
+          )}" style="display: contents;">Link</a></span>
+        </div>
+      `;
+
+        const marker = L.marker([f.geocodage_xy.lat, f.geocodage_xy.lon])
+          .addTo(this.map)
+          .bindPopup(popupContent);
+
+        markers.push(marker);
+      }
+    });
+
+    if (markers.length) {
+      const group = L.featureGroup(markers);
+      this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
+    }
+  }
+
+  private initMap(): void {
     this.map = L.map('map', {
-      center: [39.8282, -98.5795],
       zoom: 3,
     });
 
@@ -127,19 +163,14 @@ export class FestivalsPageComponent {
     );
 
     tiles.addTo(this.map);
-
-    // Add markers
-    const markers = coordinates.map(([lat, lng]) =>
-      L.marker([lat, lng]).addTo(this.map)
-    );
-
-    // Auto-fit the map to include all markers
-    const group = L.featureGroup(markers);
-    this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
   }
 
   ngOnInit() {
     this.loadFestivals();
     this.handleSort();
+  }
+
+  ngAfterViewInit() {
+    this.initMap();
   }
 }
