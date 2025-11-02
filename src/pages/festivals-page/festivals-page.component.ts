@@ -8,7 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { FestivalService } from '@/services/festival.services';
+import { UrlUtils } from '@/utils/url.utils';
 import { FestivalCardComponent } from '@/components/festival-card/festival-card.component';
+import {
+  CustomMapComponent,
+  MapItem,
+} from '@/components/custom-map/custom-map.component';
 import {
   Festival,
   FestivalResponse,
@@ -25,6 +30,7 @@ import { SearchStore } from '@/store/search.store';
   imports: [
     CommonModule,
     FestivalCardComponent,
+    CustomMapComponent,
     MatDividerModule,
     MatPaginatorModule,
     MatIconModule,
@@ -47,14 +53,29 @@ export class FestivalsPageComponent {
     []
   );
   festivalKeys = this.mapFestivalKeysForSelction();
+  mapItems: MapItem[] = [];
 
   constructor(
     private readonly festivalService: FestivalService,
-    private readonly searchStore: SearchStore
+    private readonly searchStore: SearchStore,
+    public urlUtils: UrlUtils
   ) {}
 
   get searchInput$() {
     return this.searchStore.searchInput$;
+  }
+
+  updateMapItems() {
+    this.mapItems = this.festivals.map((festival: Festival) => ({
+      title: festival.nom_du_festival,
+      date: festival.periode_principale_de_deroulement_du_festival,
+      location: festival.commune_principale_de_deroulement,
+      link: festival.site_internet_du_festival,
+      geocode: {
+        latitute: festival.geocodage_xy?.lat,
+        longitude: festival.geocodage_xy?.lon,
+      },
+    }));
   }
 
   mapFestivalKeysForSelction() {
@@ -90,6 +111,7 @@ export class FestivalsPageComponent {
           next: (response: FestivalResponse) => {
             this.festivals = response.results;
             this.itemsLength = response.total_count;
+            this.updateMapItems();
             this.isLoading = false;
           },
           error: (e) => {
