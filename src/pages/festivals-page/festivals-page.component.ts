@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -11,13 +11,16 @@ import { FestivalService } from '@/services/festival.services';
 import { UrlUtils } from '@/utils/url.utils';
 import { FestivalCardComponent } from '@/components/festival-card/festival-card.component';
 import {
+  CustomMapComponent,
+  MapItem,
+} from '@/components/custom-map/custom-map.component';
+import {
   Festival,
   FestivalResponse,
   FestivalKeys,
   festivalKeyTranslation,
 } from '@/models/festival.model';
 import { SearchStore } from '@/store/search.store';
-import * as L from 'leaflet';
 
 @Component({
   selector: 'festivals-page',
@@ -27,6 +30,7 @@ import * as L from 'leaflet';
   imports: [
     CommonModule,
     FestivalCardComponent,
+    CustomMapComponent,
     MatDividerModule,
     MatPaginatorModule,
     MatIconModule,
@@ -37,8 +41,7 @@ import * as L from 'leaflet';
     MatSelectModule,
   ],
 })
-export class FestivalsPageComponent implements AfterViewInit {
-  private map!: L.Map;
+export class FestivalsPageComponent {
   festivals: Festival[] = [];
   isLoading: boolean = false;
   pageSize: number = 5;
@@ -50,6 +53,7 @@ export class FestivalsPageComponent implements AfterViewInit {
     []
   );
   festivalKeys = this.mapFestivalKeysForSelction();
+  mapItems: MapItem[] = [];
 
   constructor(
     private readonly festivalService: FestivalService,
@@ -59,6 +63,19 @@ export class FestivalsPageComponent implements AfterViewInit {
 
   get searchInput$() {
     return this.searchStore.searchInput$;
+  }
+
+  updateMapItems() {
+    this.mapItems = this.festivals.map((festival: Festival) => ({
+      title: festival.nom_du_festival,
+      date: festival.periode_principale_de_deroulement_du_festival,
+      location: festival.commune_principale_de_deroulement,
+      link: festival.site_internet_du_festival,
+      geocode: {
+        latitute: festival.geocodage_xy?.lat,
+        longitude: festival.geocodage_xy?.lon,
+      },
+    }));
   }
 
   mapFestivalKeysForSelction() {
@@ -94,8 +111,8 @@ export class FestivalsPageComponent implements AfterViewInit {
           next: (response: FestivalResponse) => {
             this.festivals = response.results;
             this.itemsLength = response.total_count;
+            this.updateMapItems();
             this.isLoading = false;
-            this.updateMapMarkers();
           },
           error: (e) => {
             console.error(e);
@@ -109,68 +126,8 @@ export class FestivalsPageComponent implements AfterViewInit {
     this.orderBy.valueChanges.subscribe(() => this.loadFestivals());
   }
 
-  private updateMapMarkers(): void {
-    if (!this.map || !this.festivals.length) return;
-
-    this.map.eachLayer((layer) => {
-      if ((layer as any).getLatLng) this.map.removeLayer(layer);
-    });
-
-    const markers: L.Marker[] = [];
-    this.festivals.forEach((f) => {
-      if (f.geocodage_xy?.lat && f.geocodage_xy.lon) {
-        const popupContent = `
-        <div style="min-width:150px">
-          <strong>${f.nom_du_festival}</strong>
-          <br><br> 📅 ${
-            f.periode_principale_de_deroulement_du_festival || 'Unknown date'
-          }
-          <br>📍 ${f.commune_principale_de_deroulement || 'Unknown location'}
-          <br>
-          <span>🔗 <a href="${this.urlUtils.formatUrl(
-            f.site_internet_du_festival
-          )}" style="display: contents;">Link</a></span>
-        </div>
-      `;
-
-        const marker = L.marker([f.geocodage_xy.lat, f.geocodage_xy.lon])
-          .addTo(this.map)
-          .bindPopup(popupContent);
-
-        markers.push(marker);
-      }
-    });
-
-    if (markers.length) {
-      const group = L.featureGroup(markers);
-      this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
-    }
-  }
-
-  private initMap(): void {
-    this.map = L.map('map', {
-      zoom: 3,
-    });
-
-    const tiles = L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        maxZoom: 18,
-        minZoom: 3,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }
-    );
-
-    tiles.addTo(this.map);
-  }
-
   ngOnInit() {
     this.loadFestivals();
     this.handleSort();
-  }
-
-  ngAfterViewInit() {
-    this.initMap();
   }
 }

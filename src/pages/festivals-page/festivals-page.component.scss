@@ -41,7 +41,7 @@
 }
 
 .festival-list,
-.map-container {
+.custom-map {
   display: flex;
   flex-direction: column;
   width: 50%;
@@ -51,21 +51,11 @@
     }
 }
 
-.map-container {
+.custom-map {
   height: 600px;
 
-  @media screen and (max-width: 950px) {
-      height: 400px;
-    }
-}
-
-.map-frame {
-  height: 100%;
-  border-radius: 12px;
-  border: 1px solid #c4c6d0;
-  overflow: hidden;
-}
-
-#map {
-  height: 100%;
+@media screen and (max-width: 950px) {
+    width: 100%;
+    height: 400px;
+  }
 }
