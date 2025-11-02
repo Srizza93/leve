@@ -14,7 +14,7 @@ export interface MapItem {
   location?: string;
   link?: string | null;
   geocode: {
-    latitute?: number;
+    latitude?: number;
     longitude?: number;
   };
 }
@@ -41,7 +41,7 @@ export class CustomMapComponent implements AfterViewInit, OnChanges {
 
     const markers: L.Marker[] = [];
     this.mapItems.forEach((item) => {
-      if (item.geocode.latitute && item.geocode.longitude) {
+      if (item.geocode.latitude && item.geocode.longitude) {
         const popupContent = `
         <div style="min-width:150px">
           <strong>${item.title}</strong>
@@ -54,7 +54,7 @@ export class CustomMapComponent implements AfterViewInit, OnChanges {
         </div>
       `;
 
-        const marker = L.marker([item.geocode.latitute, item.geocode.longitude])
+        const marker = L.marker([item.geocode.latitude, item.geocode.longitude])
           .addTo(this.map)
           .bindPopup(popupContent);
 

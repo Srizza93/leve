@@ -37,7 +37,7 @@ export class FestivalDetailPageComponent {
         location: this.festival?.commune_principale_de_deroulement,
         link: this.festival?.site_internet_du_festival,
         geocode: {
-          latitute: this.festival?.geocodage_xy?.lat,
+          latitude: this.festival?.geocodage_xy?.lat,
           longitude: this.festival?.geocodage_xy?.lon,
         },
       },
