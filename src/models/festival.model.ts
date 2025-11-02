@@ -35,8 +35,8 @@ export interface Festival {
 }
 
 export interface FestivalResponse {
-  results: Festival[]
-  total_count: number
+  results: Festival[];
+  total_count: number;
 }
 
 export enum FestivalKeys {
@@ -73,33 +73,20 @@ export enum FestivalKeys {
 }
 
 export const festivalKeyTranslation: Partial<Record<FestivalKeys, string>> = {
-  nom_du_festival: "Name of the festival",
-  envergure_territoriale: "Territorial scope",
-  region_principale_de_deroulement: "Main region of the event",
-  departement_principal_de_deroulement: "Main department of the event",
-  commune_principale_de_deroulement: "Main municipality of the event",
-  code_postal_de_la_commune_principale_de_deroulement: "Postal code of the main municipality",
-  code_insee_commune: "INSEE code of the municipality",
-  code_insee_epci_collage_en_valeur: "INSEE code of the EPCI (intercommunal structure)",
-  libelle_epci_collage_en_valeur: "Name of the EPCI (intercommunal structure)",
-  numero_de_voie: "Street number",
-  type_de_voie_rue_avenue_boulevard_etc: "Type of street (street, avenue, boulevard, etc.)",
-  nom_de_la_voie: "Street name",
-  adresse_postale: "Postal address",
-  complement_d_adresse_facultatif: "Address complement (optional)",
-  site_internet_du_festival: "Festival website",
-  adresse_e_mail: "Email address",
-  decennie_de_creation_du_festival: "Decade of the festival’s creation",
-  annee_de_creation_du_festival: "Year of the festival’s creation",
-  discipline_dominante: "Main discipline",
-  sous_categorie_spectacle_vivant: "Subcategory – Performing arts",
-  sous_categorie_musique: "Subcategory – Music",
-  sous_categorie_musique_cnm: "Subcategory – Music (CNM classification)",
-  sous_categorie_cinema_et_audiovisuel: "Subcategory – Cinema and audiovisual",
-  sous_categorie_arts_visuels_et_arts_numeriques: "Subcategory – Visual and digital arts",
-  sous_categorie_livre_et_litterature: "Subcategory – Books and literature",
-  periode_principale_de_deroulement_du_festival: "Main period of the festival",
-  identifiant_agence_a: "Agency identifier A",
-  identifiant: "Identifier",
-  identifiant_cnm: "CNM identifier",
+  nom_du_festival: 'Name of the festival',
+  region_principale_de_deroulement: 'Main region of the event',
+  departement_principal_de_deroulement: 'Main department of the event',
+  commune_principale_de_deroulement: 'Main municipality of the event',
+  code_postal_de_la_commune_principale_de_deroulement:
+    'Postal code of the main municipality',
+  decennie_de_creation_du_festival: 'Decade of the festival’s creation',
+  annee_de_creation_du_festival: 'Year of the festival’s creation',
+  discipline_dominante: 'Main discipline',
+  sous_categorie_spectacle_vivant: 'Subcategory – Performing arts',
+  sous_categorie_musique: 'Subcategory – Music',
+  sous_categorie_musique_cnm: 'Subcategory – Music (CNM classification)',
+  sous_categorie_cinema_et_audiovisuel: 'Subcategory – Cinema and audiovisual',
+  sous_categorie_arts_visuels_et_arts_numeriques:
+    'Subcategory – Visual and digital arts',
+  sous_categorie_livre_et_litterature: 'Subcategory – Books and literature',
 };
