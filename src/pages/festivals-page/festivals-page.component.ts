@@ -12,6 +12,7 @@ import { UrlUtils } from '@/utils/url.utils';
 import { FestivalCardComponent } from '@/components/festival-card/festival-card.component';
 import {
   CustomMapComponent,
+  MapEvent,
   MapItem,
 } from '@/components/custom-map/custom-map.component';
 import {
@@ -21,6 +22,8 @@ import {
   festivalKeyTranslation,
 } from '@/models/festival.model';
 import { SearchStore } from '@/store/search.store';
+import { Router } from '@angular/router';
+import { FestivalDetailPath } from '@/constants/paths.constants';
 
 @Component({
   selector: 'festivals-page',
@@ -58,6 +61,7 @@ export class FestivalsPageComponent {
   constructor(
     private readonly festivalService: FestivalService,
     private readonly searchStore: SearchStore,
+    private readonly router: Router,
     public urlUtils: UrlUtils
   ) {}
 
@@ -67,6 +71,7 @@ export class FestivalsPageComponent {
 
   updateMapItems() {
     this.mapItems = this.festivals.map((festival: Festival) => ({
+      id: festival.identifiant,
       title: festival.nom_du_festival,
       date: festival.periode_principale_de_deroulement_du_festival,
       location: festival.commune_principale_de_deroulement,
@@ -75,7 +80,18 @@ export class FestivalsPageComponent {
         latitude: festival.geocodage_xy?.lat,
         longitude: festival.geocodage_xy?.lon,
       },
+      actions: [
+        { name: 'access-festival-details', label: 'See festival info' },
+      ],
     }));
+  }
+
+  handleMapEvent(event: MapEvent) {
+    if (event.actionId === 'access-festival-details') {
+      this.router.navigate([FestivalDetailPath], {
+        queryParams: { festivalId: event.id },
+      });
+    }
   }
 
   mapFestivalKeysForSelction() {

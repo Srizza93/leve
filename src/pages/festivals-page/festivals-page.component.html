@@ -18,7 +18,11 @@
         <festival-card [festival]="festival" />
       </li>
     </ul>
-    <custom-map [mapItems]="mapItems" class="custom-map" />
+    <custom-map
+      [mapItems]="mapItems"
+      (mapEvent)="handleMapEvent($event)"
+      class="custom-map"
+    />
   </div>
 
   <mat-paginator
