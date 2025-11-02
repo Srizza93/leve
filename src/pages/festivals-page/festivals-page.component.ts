@@ -72,7 +72,7 @@ export class FestivalsPageComponent {
       location: festival.commune_principale_de_deroulement,
       link: festival.site_internet_du_festival,
       geocode: {
-        latitute: festival.geocodage_xy?.lat,
+        latitude: festival.geocodage_xy?.lat,
         longitude: festival.geocodage_xy?.lon,
       },
     }));
