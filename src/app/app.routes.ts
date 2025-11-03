@@ -1,5 +1,9 @@
 import { Routes } from '@angular/router';
-import { FestivalsPath, FestivalDetailPath } from '@/constants/paths.constants';
+import {
+  FestivalsPath,
+  FestivalDetailPath,
+  MapViewPath,
+} from '@/constants/paths.constants';
 
 export const routes: Routes = [
   { path: '', redirectTo: FestivalsPath, pathMatch: 'full' },
@@ -8,6 +12,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@/pages/festivals-page/festivals-page.component').then(
         (m) => m.FestivalsPageComponent
+      ),
+  },
+  {
+    path: MapViewPath,
+    loadComponent: () =>
+      import('@/pages/map-view-page/map-view-page.component').then(
+        (m) => m.MapViewPageComponent
       ),
   },
   {

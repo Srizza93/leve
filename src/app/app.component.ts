@@ -6,7 +6,11 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { FestivalDetailPath, FestivalsPath } from '@/constants/paths.constants';
+import {
+  FestivalDetailPath,
+  FestivalsPath,
+  MapViewPath,
+} from '@/constants/paths.constants';
 import { SearchStore } from '@/store/search.store';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -34,12 +38,16 @@ export class AppComponent {
     private readonly searchStore: SearchStore
   ) {}
 
+  get viewMapButtonLabel(): string {
+    return this.currentRoute === FestivalsPath ? 'View on map' : 'Back';
+  }
+
   get isSearchInputAllowed(): boolean {
     const currentRoute = this.currentRoute.substring(
       this.currentRoute.indexOf('/') + 1
     );
 
-    return [FestivalsPath].includes(currentRoute);
+    return [FestivalsPath, MapViewPath].includes(currentRoute);
   }
 
   get isBackIconAllowed(): boolean {
@@ -49,6 +57,14 @@ export class AppComponent {
     );
 
     return [FestivalDetailPath].includes(currentRoute);
+  }
+
+  viewOnMap() {
+    if (this.currentRoute === FestivalsPath) {
+      this.router.navigate([MapViewPath]);
+    } else {
+      this.router.navigate([FestivalsPath]);
+    }
   }
 
   getRouteName() {

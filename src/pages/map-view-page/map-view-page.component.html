@@ -1,0 +1,25 @@
+<div class="map-container">
+  <mat-paginator
+    (page)="handlePageEvent($event)"
+    class="paginator"
+    [length]="itemsLength"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+  <custom-map [mapItems]="mapItems" class="custom-map">
+    <form class="sort">
+      <mat-form-field>
+        <mat-label>Type</mat-label>
+        <mat-select [formControl]="orderBy">
+          @for (festivalKey of festivalKeys; track festivalKey) {
+          <mat-option [value]="festivalKey.value">{{
+            festivalKey.valueView
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </custom-map>
+</div>

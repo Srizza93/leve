@@ -9,17 +9,22 @@
       <mat-icon class="header__back-btn__icon">arrow_circle_left</mat-icon>
     </button>
 
-    <form *ngIf="isSearchInputAllowed" class="header__search-form">
-      <mat-form-field>
-        <mat-icon matPrefix>search</mat-icon>
-        <input
-          type="text"
-          matInput
-          [formControl]="searchInput"
-          placeholder="Search by name, city, department..."
-        />
-      </mat-form-field>
-    </form>
+    <div class="search-block" *ngIf="isSearchInputAllowed">
+      <form class="header__search-form">
+        <mat-form-field>
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            type="text"
+            matInput
+            [formControl]="searchInput"
+            placeholder="Search by name, city, department..."
+          />
+        </mat-form-field>
+      </form>
+      <button (click)="viewOnMap()" class="map-view-button">
+        {{ viewMapButtonLabel }}
+      </button>
+    </div>
   </header>
   <mat-divider></mat-divider>
 
