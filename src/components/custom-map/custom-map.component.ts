@@ -94,6 +94,8 @@ export class CustomMapComponent implements AfterViewInit, OnChanges {
       }
     });
 
+    this.setupIcons();
+
     if (markers.length) {
       const group = L.featureGroup(markers);
       this.map.fitBounds(group.getBounds(), { padding: [50, 50] });
@@ -116,6 +118,23 @@ export class CustomMapComponent implements AfterViewInit, OnChanges {
     );
 
     tiles.addTo(this.map);
+  }
+
+  setupIcons() {
+    const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
+    const iconUrl = 'leaflet/marker-icon.png';
+    const shadowUrl = 'leaflet/marker-shadow.png';
+
+    L.Marker.prototype.options.icon = L.icon({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41],
+    });
   }
 
   initButtonsEvents() {
