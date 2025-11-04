@@ -8,7 +8,11 @@
     aria-label="Select page"
   >
   </mat-paginator>
-  <custom-map [mapItems]="mapItems" class="custom-map">
+  <custom-map
+    [mapItems]="mapItems"
+    (mapEvent)="handleMapEvent($event)"
+    class="custom-map"
+  >
     <form class="sort">
       <mat-form-field>
         <mat-label>Type</mat-label>
