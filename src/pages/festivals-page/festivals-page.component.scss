@@ -7,6 +7,10 @@
   display: block;
   width: fit-content;
   margin: 1.25rem 2rem;
+
+  @media screen and (max-width: 550px) {
+    margin: 1.25rem 1rem;
+  }
 }
 
 .festival-container {
@@ -15,8 +19,12 @@
   gap: 2rem;
 
   @media screen and (max-width: 950px) {
-      flex-direction: column-reverse;
-    }
+    flex-direction: column-reverse;
+  }
+  
+  @media screen and (max-width: 550px) {
+    padding: 0 1rem;
+  }
 }
 
 .festival-list {
@@ -35,7 +43,7 @@
 }
 
 .paginator {
-  padding: 8px;
+  padding: 1rem;
   border-top: 1px solid #c4c6d0;
 }
 

@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import {
   FestivalDetailPath,
   FestivalsPath,
@@ -35,7 +35,8 @@ export class AppComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly searchStore: SearchStore
+    private readonly searchStore: SearchStore,
+    private readonly location: Location
   ) {}
 
   get viewMapButtonLabel(): string {
@@ -85,7 +86,7 @@ export class AppComponent {
   }
 
   goToFestivalsPage() {
-    this.router.navigate([FestivalsPath]);
+    this.location.back();
   }
 
   ngOnInit() {

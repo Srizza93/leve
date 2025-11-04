@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   padding: 0 2rem;
+
+  @media screen and (max-width: 550px) {
+    padding: 0 1rem;
+  }
 }
 
 .header {
